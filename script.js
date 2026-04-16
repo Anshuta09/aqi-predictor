@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     const form = document.getElementById('predictForm');
-    const predictBtn = document.querySelector('.predict-btn');
 
-    // 🔹 Input validation (real-time)
+    if (!form) return;
+
     const inputs = form.querySelectorAll('input');
+
+    // 🔹 Input validation
     inputs.forEach(input => {
         input.addEventListener('input', function() {
             this.style.borderColor = this.checkValidity() 
@@ -12,9 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 : '#e74c3c';
         });
     });
-
-    // 🔹 Show loading animation (BUT allow form submit)
-    
 
     // 🔹 Input focus animation
     inputs.forEach(input => {
@@ -27,47 +26,40 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-});
+    // 🔥 AQI COLOR LOGIC (NEW FEATURE)
+    const aqiElement = document.querySelector('.aqi-big');
+    const statusElement = document.querySelector('.aqi-status');
 
+    if (aqiElement && statusElement) {
 
-window.addEventListener('load', function () {
-    const el = document.getElementById('serverPrediction');
-    const prediction = el ? el.value : null;
+        const value = Number(aqiElement.textContent.trim()) || 0;
 
-    console.log("Prediction:", prediction);
-    if (prediction && prediction.includes("AQI")) {
-        const value = parseInt(prediction.match(/\d+/)[0]);
-
-        // 🔥 SWITCH VIEW
-       // document.querySelector('.predictor-card').style.display = 'none';
-        document.getElementById('resultPage').style.display = 'block';
-
-        const aqiBig = document.getElementById('aqiBig');
-        const aqiStatus = document.getElementById('aqiStatus');
-
-        // 🎯 COUNT ANIMATION
-        let count = 0;
-        let interval = setInterval(() => {
-            count += Math.ceil(value / 30);
-            if (count >= value) {
-                count = value;
-                clearInterval(interval);
-            }
-            aqiBig.innerText = count;
-        }, 30);
-
-        // 🎨 STATUS
+        let className = "";
         let status = "";
-        if (value <= 50) status = "Good 🌿";
-        else if (value <= 100) status = "Moderate 😐";
-        else if (value <= 200) status = "Poor 😷";
-        else if (value <= 300) status = "Very Poor ⚠️";
-        else status = "Severe ☠️";
 
-        aqiStatus.innerText = status;
-    }});
-       
-function goBack() {
-    document.getElementById('resultPage').style.display = 'none';
-    document.querySelector('.predictor-card').style.display = 'block';
-}
+        if (value <= 50) {
+            className = "aqi-good";
+            status = "Good 🌿";
+        }
+        else if (value <= 100) {
+            className = "aqi-moderate";
+            status = "Moderate 😐";
+        }
+        else if (value <= 200) {
+            className = "aqi-poor";
+            status = "Poor 😷";
+        }
+        else if (value <= 300) {
+            className = "aqi-very-poor";
+            status = "Very Poor ⚠️";
+        }
+        else {
+            className = "aqi-severe";
+            status = "Severe ☠️";
+        }
+
+        aqiElement.className = "aqi-big " + className;
+        statusElement.innerText = status;
+    }
+
+});
