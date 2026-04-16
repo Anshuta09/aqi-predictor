@@ -4,111 +4,253 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AQI Predictor - Modern Air Quality Forecast</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- 🔥 Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
-    <div class="container">
-        <header class="header">
-            <div class="header-content">
-                <i class="fas fa-wind header-icon"></i>
-                <h1>AQI Predictor</h1>
-                <p>Advanced Air Quality Index Forecasting</p>
-            </div>
-        </header>
 
-        <main class="main-content">
-            <div class="card predictor-card">
-                <div class="card-header">
-                    <h2><i class="fas fa-chart-line"></i> Enter Pollution Parameters</h2>
+<div class="container">
+
+    <!-- HEADER -->
+    <header class="header">
+        <i class="fas fa-wind"></i>
+        <h1>AQI Predictor</h1>
+        <p>Advanced Air Quality Index Forecasting</p>
+    </header>
+
+    <!-- FORM -->
+    <div class="card predictor-card">
+        <h2><i class="fas fa-chart-line"></i> Enter Pollution Parameters</h2>
+
+        <form id="predictForm" method="POST" action="/predict">
+
+            <div class="form-grid">
+
+                <div class="input-group">
+                    <label>PM2.5</label>
+                    <input type="number" name="pm25" step="0.01">
                 </div>
-                <form id="predictForm" class="predict-form" method="POST" action="/predict">
-                    <div class="form-grid">
-                        <div class="input-group">
-                            <label><i class="fas fa-smog"></i> PM2.5</label>
-                            <input type="number" name="pm25" placeholder="µg/m³" step="0.01">
-                        </div>
-                        <div class="input-group">
-                            <label><i class="fas fa-smog"></i> PM10</label>
-                            <input type="number" name="pm10" placeholder="µg/m³" step="0.01">
-                        </div>
-                        <div class="input-group">
-                            <label><i class="fas fa-industry"></i> NO2</label>
-                            <input type="number" name="no2" placeholder="µg/m³" step="0.01">
-                        </div>
-                        <div class="input-group">
-                            <label><i class="fas fa-industry"></i> SO2</label>
-                            <input type="number" name="so2" placeholder="µg/m³" step="0.01">
-                        </div>
-                        <div class="input-group">
-                            <label><i class="fas fa-fire"></i> CO</label>
-                            <input type="number" name="co" placeholder="mg/m³" step="0.001">
-                        </div>
-                        <div class="input-group">
-                            <label><i class="fas fa-sun"></i> O3</label>
-                            <input type="number" name="o3" placeholder="µg/m³" step="0.01">
-                        </div>
-                        <div class="input-group">
-                            <label><i class="fas fa-thermometer-half"></i> Temperature</label>
-                            <input type="number" name="temperature" placeholder="°C" step="0.1">
-                        </div>
-                        <div class="input-group">
-                            <label><i class="fas fa-tint"></i> Humidity</label>
-                            <input type="number" name="humidity" placeholder="%" min="0" max="100" step="0.1">
-                        </div>
-                        <div class="input-group">
-                            <label><i class="fas fa-wind"></i> Wind Speed</label>
-                            <input type="number" name="wind_speed" placeholder="m/s" step="0.1">
-                        </div>
-                        <div class="input-group">
-                            <label><i class="fas fa-eye"></i> Visibility</label>
-                            <input type="number" name="visibility" placeholder="km" step="0.1">
-                        </div>
-                        <div class="input-group">
-                            <label><i class="fas fa-calendar"></i> Month</label>
-                            <input type="number" name="month" placeholder="1-12" min="1" max="12">
-                        </div>
-                        <div class="input-group">
-                            <label><i class="fas fa-clock"></i> Hour</label>
-                            <input type="number" name="hour" placeholder="0-23" min="0" max="23">
-                        </div>
-                    </div>
-                    <!-- 🔥 RESULT PAGE -->
-                
-    
-    <h1 class="aqi-title">AQI</h1>
-    
-    <div class="aqi-big" id="aqiBig">0</div>
-    <div class="aqi-status" id="aqiStatus"></div>
 
-</div>
+                <div class="input-group">
+                    <label>PM10</label>
+                    <input type="number" name="pm10" step="0.01">
+                </div>
 
-<!-- hidden prediction -->
+                <div class="input-group">
+                    <label>NO2</label>
+                    <input type="number" name="no2" step="0.01">
+                </div>
 
-                    <button type="submit" class="predict-btn">
-    <span class="btn-text">Predict AQI</span>
-</button>
+                <div class="input-group">
+                    <label>SO2</label>
+                    <input type="number" name="so2" step="0.01">
+                </div>
 
-    <div id="resultContainer" class="result-container" style="display: none;">
-    <div class="result-card" id="resultCard">
-        <div class="result-header">
-            <h3>Predicted AQI</h3>
+                <div class="input-group">
+                    <label>CO</label>
+                    <input type="number" name="co" step="0.001">
+                </div>
+
+                <div class="input-group">
+                    <label>O3</label>
+                    <input type="number" name="o3" step="0.01">
+                </div>
+
+                <div class="input-group">
+                    <label>Temperature</label>
+                    <input type="number" name="temperature" step="0.1">
+                </div>
+
+                <div class="input-group">
+                    <label>Humidity</label>
+                    <input type="number" name="humidity" step="0.1">
+                </div>
+
+                <div class="input-group">
+                    <label>Wind Speed</label>
+                    <input type="number" name="wind_speed" step="0.1">
+                </div>
+
+                <div class="input-group">
+                    <label>Visibility</label>
+                    <input type="number" name="visibility" step="0.1">
+                </div>
+
+                <div class="input-group">
+                    <label>Month</label>
+                    <input type="number" name="month">
+                </div>
+
+                <div class="input-group">
+                    <label>Hour</label>
+                    <input type="number" name="hour">
+                </div>
+
+            </div>
+
+            <button type="submit" class="predict-btn">Predict AQI</button>
+        </form>
+
+        <div class="info-section" style="margin-top:30px;">
+
+            <h3>Parameter Information</h3>
+
+            <div class="info-grid">
+
+                <div class="info-card">
+                    <h4>PM2.5</h4>
+                    <p>Fine particles that penetrate deep into lungs. Major contributor to AQI.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>PM10</h4>
+                    <p>Coarse particles from dust and construction activities.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>NO2</h4>
+                    <p>Produced from vehicles and combustion processes.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>SO2</h4>
+                    <p>Emitted from industrial processes and burning fossil fuels.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>CO</h4>
+                    <p>Toxic gas from incomplete combustion of fuel.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>O3</h4>
+                    <p>Ground-level ozone formed by sunlight reactions.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>Temperature</h4>
+                    <p>Affects chemical reactions and pollutant dispersion.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>Humidity</h4>
+                    <p>High humidity can increase pollutant concentration.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>Wind Speed</h4>
+                    <p>Higher wind reduces pollution by dispersion.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>Visibility</h4>
+                    <p>Low visibility indicates high pollution levels.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>Month</h4>
+                    <p>Captures seasonal pollution patterns.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>Hour</h4>
+                    <p>Captures daily variation in pollution levels.</p>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- 🔥 RESULT -->
+        {% if prediction_text %}
+
+
+
+        <div class="result-section" style="margin-top:30px; text-align:center;">
+
+            <h1>AQI</h1>
+            <div style="font-size:80px; font-weight:bold;">{{ prediction_text }}</div>
+
+            <div style="font-size:20px; margin-bottom:20px;">
+                {{ category }}
+            </div>
+
+            <!-- 🔥 MAIN CONTRIBUTOR -->
+            <div style="margin-bottom:20px; font-weight:bold;">
+                Main Pollutant: {{ top_feature }}
+            </div>
+
+            <!-- 🔥 CHARTS -->
+            <div style="display:flex; gap:30px; flex-wrap:wrap; justify-content:center;">
+
+                <div style="width:400px;">
+                    <h3>Input Parameters</h3>
+                    <canvas id="barChart"></canvas>
+                </div>
+
+                <div style="width:400px;">
+                    <h3>Pollution Contribution</h3>
+                    <canvas id="pieChart"></canvas>
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="aqi-value" id="aqiValue">0</div>
-        <div class="aqi-label" id="aqiLabel"></div>
+        {% endif %}
+
     </div>
+
 </div>
 
-                </form>
 
-                <input type="hidden" id="serverPrediction" value="{{ prediction_text }}">
-                <div id="resultPage" class="result-page" style="display:none;"></div>
-                
-            </div>
-        </main>
-    </div>
+<script>
+    const importanceData = {{ importance | default({}) | tojson }};
+    const inputData = {{ inputs | default({}) | tojson }};
+    const aqiValue = {{ prediction_text | default(0) | tojson }};
+</script>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+<script>
+
+if (importanceData && Object.keys(importanceData).length > 0) {
+
+    new Chart(document.getElementById('pieChart'), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(importanceData),
+            datasets: [{
+                data: Object.values(importanceData)
+            }]
+        }
+    });
+}
+
+if (inputData && Object.keys(inputData).length > 0) {
+
+    const labels = Object.keys(inputData);
+    const values = Object.values(inputData);
+
+    labels.push("AQI");
+    values.push(parseFloat(aqiValue));
+
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Values",
+                data: values
+            }]
+        }
+    });
+}
+
+</script>
+
 </body>
 </html>
