@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQI Predictor - Modern Air Quality Forecast</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <i class="fas fa-wind header-icon"></i>
+                <h1>AQI Predictor</h1>
+                <p>Advanced Air Quality Index Forecasting</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="card predictor-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-line"></i> Enter Pollution Parameters</h2>
+                </div>
+                <form id="predictForm" class="predict-form" method="POST" action="/predict">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label><i class="fas fa-smog"></i> PM2.5</label>
+                            <input type="number" name="pm25" placeholder="µg/m³" step="0.01">
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-smog"></i> PM10</label>
+                            <input type="number" name="pm10" placeholder="µg/m³" step="0.01">
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-industry"></i> NO2</label>
+                            <input type="number" name="no2" placeholder="µg/m³" step="0.01">
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-industry"></i> SO2</label>
+                            <input type="number" name="so2" placeholder="µg/m³" step="0.01">
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-fire"></i> CO</label>
+                            <input type="number" name="co" placeholder="mg/m³" step="0.001">
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-sun"></i> O3</label>
+                            <input type="number" name="o3" placeholder="µg/m³" step="0.01">
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-thermometer-half"></i> Temperature</label>
+                            <input type="number" name="temperature" placeholder="°C" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-tint"></i> Humidity</label>
+                            <input type="number" name="humidity" placeholder="%" min="0" max="100" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-wind"></i> Wind Speed</label>
+                            <input type="number" name="wind_speed" placeholder="m/s" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-eye"></i> Visibility</label>
+                            <input type="number" name="visibility" placeholder="km" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-calendar"></i> Month</label>
+                            <input type="number" name="month" placeholder="1-12" min="1" max="12">
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-clock"></i> Hour</label>
+                            <input type="number" name="hour" placeholder="0-23" min="0" max="23">
+                        </div>
+                    </div>
+                    <!-- 🔥 RESULT PAGE -->
+                
+    
+    <h1 class="aqi-title">AQI</h1>
+    
+    <div class="aqi-big" id="aqiBig">0</div>
+    <div class="aqi-status" id="aqiStatus"></div>
+
+</div>
+
+<!-- hidden prediction -->
+
+                    <button type="submit" class="predict-btn">
+    <span class="btn-text">Predict AQI</span>
+</button>
+
+    <div id="resultContainer" class="result-container" style="display: none;">
+    <div class="result-card" id="resultCard">
+        <div class="result-header">
+            <h3>Predicted AQI</h3>
+        </div>
+
+        <div class="aqi-value" id="aqiValue">0</div>
+        <div class="aqi-label" id="aqiLabel"></div>
+    </div>
+</div>
+
+                </form>
+
+                <input type="hidden" id="serverPrediction" value="{{ prediction_text }}">
+                <div id="resultPage" class="result-page" style="display:none;"></div>
+                
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
